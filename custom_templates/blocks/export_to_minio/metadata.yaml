@@ -1,0 +1,11 @@
+block_type: data_exporter
+color: null
+configuration: null
+description: (batch) This is a data exporter that exports CSV files to MinIO and also
+  saves them to Neo4j for semantics.
+language: python
+name: Exporter Minio
+pipeline: {}
+tags: []
+user:
+  username: admin

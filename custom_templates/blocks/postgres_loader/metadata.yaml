@@ -1,0 +1,10 @@
+block_type: data_loader
+color: null
+configuration: null
+description: (batch) A block that loads data from a Postgres Database Table.
+language: python
+name: Postgres Loader
+pipeline: {}
+tags: []
+user:
+  username: admin
