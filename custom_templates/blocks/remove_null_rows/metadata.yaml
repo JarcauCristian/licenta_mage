@@ -1,0 +1,11 @@
+block_type: transformer
+color: null
+configuration: null
+description: (batch) A block that remove rows based on the number of null values in
+  the row.
+language: python
+name: Remove Null Rows
+pipeline: {}
+tags: []
+user:
+  username: admin

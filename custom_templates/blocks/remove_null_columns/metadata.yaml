@@ -1,0 +1,11 @@
+block_type: transformer
+color: null
+configuration: null
+description: (batch) A block that removes columns that have a percentages of null
+  values grater than a variable.
+language: python
+name: Remove Null Columns
+pipeline: {}
+tags: []
+user:
+  username: admin

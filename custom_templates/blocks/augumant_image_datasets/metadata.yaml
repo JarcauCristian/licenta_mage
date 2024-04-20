@@ -1,0 +1,10 @@
+block_type: transformer
+color: null
+configuration: null
+description: (batch) A block that augments an image dataset.
+language: python
+name: Augment Images
+pipeline: {}
+tags: []
+user:
+  username: admin
