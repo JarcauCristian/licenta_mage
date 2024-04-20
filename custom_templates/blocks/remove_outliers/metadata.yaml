@@ -1,0 +1,10 @@
+block_type: transformer
+color: null
+configuration: null
+description: (batch) A block that remove outliers from columns.
+language: python
+name: Remove Outliers
+pipeline: {}
+tags: []
+user:
+  username: admin
