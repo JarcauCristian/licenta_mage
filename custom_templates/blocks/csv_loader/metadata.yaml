@@ -1,0 +1,11 @@
+block_type: data_loader
+color: null
+configuration: null
+description: (batch) A block that loads a CSV from a MinIO bucket to run a processing
+  pipeline on it.
+language: python
+name: CSV Loader
+pipeline: {}
+tags: []
+user:
+  username: admin
