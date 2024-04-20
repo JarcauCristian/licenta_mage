@@ -1,6 +1,123 @@
+blocks:
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - iris_null_c
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: iris_pg_load
+  retry_config: null
+  status: updated
+  timeout: null
+  type: data_loader
+  upstream_blocks: []
+  uuid: iris_pg_load
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - iris_null_r
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: iris_null_c
+  retry_config: null
+  status: updated
+  timeout: null
+  type: transformer
+  upstream_blocks:
+  - iris_pg_load
+  uuid: iris_null_c
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - iris_outliers
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: iris_null_r
+  retry_config: null
+  status: updated
+  timeout: null
+  type: transformer
+  upstream_blocks:
+  - iris_null_c
+  uuid: iris_null_r
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks:
+  - iris_exporter
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: iris_outliers
+  retry_config: null
+  status: updated
+  timeout: null
+  type: transformer
+  upstream_blocks:
+  - iris_null_r
+  uuid: iris_outliers
+- all_upstream_blocks_executed: false
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: iris_exporter
+  retry_config: null
+  status: updated
+  timeout: null
+  type: data_exporter
+  upstream_blocks:
+  - iris_outliers
+  uuid: iris_exporter
+cache_block_output_in_memory: false
+callbacks: []
+concurrency_config: {}
+conditionals: []
 created_at: '2024-04-19 18:58:23.227420+00:00'
-description: not created
+data_integration: null
+description: created
+executor_config: {}
+executor_count: 1
+executor_type: null
+extensions: {}
 name: iris_60f8b0ae_2744_4ea6_a2d8_789b65b98e2d
+notification_config: {}
+remote_variables_dir: null
+retry_config: {}
+run_pipeline_in_one_process: false
+settings:
+  triggers: null
+spark_config: {}
 tags: []
 type: python
 uuid: iris_60f8b0ae_2744_4ea6_a2d8_789b65b98e2d
+variables:
+  PIPELINE_NAME: iris
+  category: Plants
+  database: postgres
+  dataset_type: classification
+  description: A dataset about the iris flower.
+  host: 62.72.21.79
+  name: 60f8b0ae_2744_4ea6_a2d8_789b65b98e2d/iris_flowers
+  new_category: plants
+  port: '5432'
+  share_data: 'on'
+  table: iris
+  target_column: variety
+  threshold: '3'
+  username: postgres
+variables_dir: /home/src/mage_data/licenta
+widgets: []
