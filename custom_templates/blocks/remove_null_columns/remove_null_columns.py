@@ -60,12 +60,12 @@ def transform(data, *args, **kwargs):
 
     threshold = kwargs.get("threshold")
 
-    if None in threshold:
+    if threshold is None:
         raise ValueError("Threshold kwargs is mandatory!")
 
     null_like_percent = data.applymap(lambda x: is_null_like(x)).mean()
 
-    columns_to_drop = null_like_percent[null_like_percent > threshold].index
+    columns_to_drop = null_like_percent[null_like_percent > float(threshold)].index
 
     data.drop(columns=columns_to_drop, inplace=True)
 

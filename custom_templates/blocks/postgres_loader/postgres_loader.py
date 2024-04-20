@@ -21,11 +21,14 @@ def load_data(*args, **kwargs):
     """
 
     username = kwargs.get('username')
-    password = kwargs.get('password')
     host = kwargs.get('host')
     port = kwargs.get('port')
     database = kwargs.get('database')
     table = kwargs.get('table')
+
+    secret_name = "password-" + kwargs.get("PIPELINE_NAME")
+
+    password = get_secret_value(secret_name)
 
     if None in [username, password, host, port, database, table]:
         raise ValueError("All connection parameters (username, password, host, port, database, table) must be provided.")

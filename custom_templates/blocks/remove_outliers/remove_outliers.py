@@ -1,5 +1,7 @@
 # Variables {"threshold":{"type":"int","description":"The threshold were lower then this outlier from a column will be removed.","range":[0,5]}}
 
+import pandas as pd
+
 if 'transformer' not in globals():
     from mage_ai.data_preparation.decorators import transformer
 if 'test' not in globals():
@@ -26,7 +28,7 @@ def transform(data, *args, **kwargs):
 
     threshold = kwargs.get("threshold")
 
-    if None in threshold:
+    if threshold is None:
         raise ValueError("Threshold kwarg must not be None.")
     
     z_scores = (data - data.mean()) / data.std()

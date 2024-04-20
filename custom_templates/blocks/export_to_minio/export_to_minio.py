@@ -40,9 +40,13 @@ def export_data(data, *args, **kwargs):
 
     final_category = str(category).lower() if new_category is None else str(new_category).lower()
 
+    headers = {
+        "Authorization": "Bearer mage_7dfe20e1136346b9dc5254f8e1941f97224a8bb50bb4b28d6acc3932a98600ec",
+        "Content-type": "application/json"
+    }
 
-    if category_new is not None:
-        response = requests.post(f"{neo4j_api}/category/create?name={final_category}")
+    if new_category is not None:
+        response = requests.post(f"{neo4j_api}/category/create?name={final_category}", headers=headers)
         if response.status_code == 201:
             print("Category Created Successfully!")
         else:
@@ -50,11 +54,14 @@ def export_data(data, *args, **kwargs):
 
     name = kwargs.get("name")
 
-    column_descriptions = kwargs.get("column_descriptions") if isinstance(kwargs.get("column_descriptions"), dict) else json.loads(kwargs.get("column_descriptions"))
+    if kwargs.get("column_descriptions") is None:
+        column_descriptions = {}
+    else:
+        column_descriptions = kwargs.get("column_descriptions") if isinstance(kwargs.get("column_descriptions"), dict) else json.loads(kwargs.get("column_descriptions"))
 
-    column_descriptions["share_data"] = str(kwargs.get("share_data"))
+    column_descriptions["share_data"] = "true" if kwargs.get("share_data").lower() == "on" else "false"
     column_descriptions["dataset_type"] = str(kwargs.get("dataset_type"))
-    column_descriptions["last_accessed"] = str(datatime.now())
+    column_descriptions["last_accessed"] = str(datetime.now())
     column_descriptions["target_column"] = str(kwargs.get("target_column"))
 
     csv_data = data.to_csv(index=False)
@@ -68,27 +75,21 @@ def export_data(data, *args, **kwargs):
         'temporary': 'false'
     }
 
-    response = requests.put(f"{minio_api}/upload_free", files=files, data=payload)
+    response = requests.post(f"{minio_api}/upload_free", files=files, data=payload)
 
     if response.status_code == 201:
-
         neo4j_payload = {
             "name": str(name.split("/")[-1]),
             "belongs_to": str(final_category),
-            "url": str(response.json().get("location")),
-            "tags": columns_descriptions,
+            "url": str(response.json()),
+            "tags": column_descriptions,
             "user": str(name.split("/")[0]),
             "description": description
-        }
-        
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": kwargs.get("KEYCLOAK_TOKEN")
         }
 
         response = requests.post(f"{neo4j_api}/dataset/create", json=neo4j_payload, headers=headers)
 
         if response.status_code != 201:
-            print("Dataset Could Not Be Created!")
+            raise ValueError("Dataset Could Not Be Created!")
     else:
-        raise ValueError(f"Error: {response.status_code} {response.json()}")
+        raise ValueError(f"Error: {response.status_code} {response.content.decode('utf-8')}")

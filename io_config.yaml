@@ -50,7 +50,7 @@ default:
   GOOGLE_SERVICE_ACC_KEY_FILEPATH: "/path/to/your/service/account/key.json"
   GOOGLE_LOCATION: US # Optional
   # MinIO
-  MINIO_API: http://10.43.227.149:49151
+  MINIO_API: http://10.43.227.149:49151/balancer
   # MongoDB
   # Specify either the connection string or the (host, password, user, port) to connect to MongoDB.
   MONGODB_CONNECTION_STRING: "mongodb://{username}:{password}@{host}:{port}/"
@@ -75,7 +75,7 @@ default:
   MYSQL_PORT: 3306
   MYSQL_USER: root
   # Neo4j
-  NEO4J_API: http://10.43.195.157:49150
+  NEO4J_API: http://10.43.195.157:49150/neo4j
   # Pinot
   PINOT_HOST: hostname
   PINOT_PASSWORD: password

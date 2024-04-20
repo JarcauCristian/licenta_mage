@@ -2,6 +2,7 @@
 
 import pandas as pd
 from sqlalchemy import create_engine
+from mage_ai.data_preparation.shared.secrets import get_secret_value
 
 if 'data_loader' not in globals():
     from mage_ai.data_preparation.decorators import data_loader
@@ -21,11 +22,14 @@ def load_data(*args, **kwargs):
     """
 
     username = kwargs.get('username')
-    password = kwargs.get('password')
     host = kwargs.get('host')
     port = kwargs.get('port')
     database = kwargs.get('database')
     table = kwargs.get('table')
+
+    secret_name = "password-" + kwargs.get("PIPELINE_NAME")
+
+    password = get_secret_value(secret_name)
 
     if None in [username, password, host, port, database, table]:
         raise ValueError("All connection parameters (username, password, host, port, database, table) must be provided.")
@@ -39,6 +43,7 @@ def load_data(*args, **kwargs):
     df = pd.read_sql(query, engine)
 
     return df
+
 
 @test
 def test_output(output, *args) -> None:
