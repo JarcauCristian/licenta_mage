@@ -1,5 +1,6 @@
 # Variables {"threshold":{"type":"int","description":"The threshold were lower then this outlier from a column will be removed.","range":[0,5]}}
 
+import numpy as np
 import pandas as pd
 
 if 'transformer' not in globals():
@@ -30,9 +31,12 @@ def transform(data, *args, **kwargs):
 
     if threshold is None:
         raise ValueError("Threshold kwarg must not be None.")
+
+    numeric_cols = data.select_dtypes(include=[np.number])
+    z_scores = (numeric_cols - numeric_cols.mean()) / numeric_cols.std()
     
-    z_scores = (data - data.mean()) / data.std()
-    filtered_data = data[(z_scores > -float(threshold)) & (z_scores < float(threshold))]
+    mask = (z_scores > -float(threshold)) & (z_scores < float(threshold))
+    filtered_data = data[mask.all(axis=1)]
 
     return filtered_data
 

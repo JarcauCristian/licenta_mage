@@ -1,5 +1,6 @@
 # Variables: {"threshold":{"type":"int","description":"The threshold were lower then this columns will be deleted.","range":[0,1]}}
 
+import numbers
 import numpy as np
 import pandas as pd
 
@@ -26,7 +27,7 @@ def is_null_like(value):
     if value in null_like_values:
         return True
 
-    if isinstance(value, float) and np.isnan(value):
+    if isinstance(value, numbers.Number) and np.isnan(value):
         return True
 
     if isinstance(value, str) and value.strip().lower() == 'nan':
@@ -63,7 +64,9 @@ def transform(data, *args, **kwargs):
     if threshold is None:
         raise ValueError("Threshold kwargs is mandatory!")
 
-    null_like_percent = data.applymap(lambda x: is_null_like(x)).mean(axis=1)
+    numeric_data = data.select_dtypes(include=[np.number])
+
+    null_like_percent = numeric_data.applymap(lambda x: is_null_like(x)).mean(axis=1)
 
     rows_to_drop = null_like_percent[null_like_percent > float(threshold)].index
 

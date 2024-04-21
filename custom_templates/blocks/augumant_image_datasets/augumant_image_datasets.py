@@ -1,4 +1,4 @@
-# Variables {"image_column":{"type":"str","description":"The column were the image links are stored.","regex":"^.*$"},"transform":{"type":"drop_down","description":"The transformation functions to apply to the images.","values":["RandomHorizontalFlip(p=0.5)->RandomVerticalFlip(p=0.5)->ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1)->RandomRotation(degrees=15)","RandomHorizontalFlip(p=0.5)->ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.05)->RandomAffine(degrees=0, translate=(0.05, 0.05), scale=(0.95, 1.05))","RandomHorizontalFlip(p=0.5)->RandomCrop(size=256, pad_if_needed=True)->ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2)","RandomRotation(degrees=10)->RandomAffine(degrees=0, translate=(0.05, 0.05), scale=(0.95, 1.05), shear=5)->GaussianBlur(kernel_size=3, sigma=(0.1, 2.0))","RandomHorizontalFlip()->RandomRotation(degrees=30)->RandomPerspective(distortion_scale=0.6, p=0.5)->ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.1)->RandomErasing(p=0.1)"]}}
+# Variables {"image_column":{"type":"str","description":"The column were the image links are stored.","regex":"^.*$"},""transform": {"type": "drop_down", "description": "The transformation functions to apply to the images.", "values": ["Basic Augmentation", "Facial Recognition Augmentation", "Object Detection Augmentation", "Medical Imaging Augmentation", "Robust Augmentation"]}}
 
 import io
 import base64
@@ -43,6 +43,21 @@ def convert_image_to_base64(image_path):
     return img_base64
 
 
+def get_augmentation_object(augmentation_type: str):
+    augmentation_type_map = {
+        "Basic Augmentation": "RandomHorizontalFlip(p=0.5)->RandomVerticalFlip(p=0.5)->ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1)->RandomRotation(degrees=15)",
+        "Facial Recognition Augmentation": "RandomHorizontalFlip(p=0.5)->ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.05)->RandomAffine(degrees=0, translate=(0.05, 0.05), scale=(0.95, 1.05))",
+        "Object Detection Augmentation": "RandomHorizontalFlip(p=0.5)->RandomCrop(size=256, pad_if_needed=True)->ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2)",
+        "Medical Imaging Augmentation": "RandomRotation(degrees=10)->RandomAffine(degrees=0, translate=(0.05, 0.05), scale=(0.95, 1.05), shear=5)->GaussianBlur(kernel_size=3, sigma=(0.1, 2.0))",
+        "Robust Augmentation": "RandomHorizontalFlip()->RandomRotation(degrees=30)->RandomPerspective(distortion_scale=0.6, p=0.5)->ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.1)->RandomErasing(p=0.1)"
+    }
+
+    if augmentation_type not in augmentation_type_map.keys():
+        raise TypeError(f"Augmentation type can only be {list(augmentation_type_map.keys())}")
+
+    return get_transformation_pipeline(augmentation_type_map[augmentation_type])
+
+
 @transformer
 def transform(data, *args, **kwargs):
     """
@@ -66,7 +81,7 @@ def transform(data, *args, **kwargs):
 
     data[image_column] = data[image_column].apply(convert_image_to_base64)
 
-    augmentation = get_transformation_pipeline(transform)
+    augmentation = get_augmentation_object(transform)
 
     def augment_image(base64_string):
         img_data = base64.b64decode(base64_string)
