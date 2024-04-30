@@ -45,7 +45,7 @@ def convert_image_to_base64(image_path):
 
 def get_augmentation_object(augmentation_type: str):
     augmentation_type_map = {
-        "Basic Augmentation": "RandomHorizontalFlip(p=0.5)->RandomVerticalFlip(p=0.5)->ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1)->RandomRotation(degrees=15)",
+        "Basic Augmentation": "RandomHorizontalFlip(p=0.5)->RandomVerticalFlip(p=0.5)->RandomRotation(degrees=(0, 360), fill=(0,0,0))->ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.05)",
         "Facial Recognition Augmentation": "RandomHorizontalFlip(p=0.5)->ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.05)->RandomAffine(degrees=0, translate=(0.05, 0.05), scale=(0.95, 1.05))",
         "Object Detection Augmentation": "RandomHorizontalFlip(p=0.5)->RandomCrop(size=256, pad_if_needed=True)->ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2)",
         "Medical Imaging Augmentation": "RandomRotation(degrees=10)->RandomAffine(degrees=0, translate=(0.05, 0.05), scale=(0.95, 1.05), shear=5)->GaussianBlur(kernel_size=3, sigma=(0.1, 2.0))",
